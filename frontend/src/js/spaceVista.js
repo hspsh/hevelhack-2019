@@ -1,16 +1,31 @@
-////////////////////////////////////////////////////////////////////
-// https://github.com/wwwtyro/procedural.js Public Domain         //
-////////////////////////////////////////////////////////////////////
-
-//TODO: Parametrize sun color.
-
 "use strict";
+
+////////////////////////////////////////////////////////////////////
+// Utility functions                                              //
+////////////////////////////////////////////////////////////////////
+
+var rgba = function(r, g, b, a) {
+    r = Math.floor(r * 255);
+    g = Math.floor(g * 255);
+    b = Math.floor(b * 255);
+    return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+}
+
+var rgbaCanvas = function(width, height, r, g, b, a) {
+    var canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    var context = canvas.getContext("2d");
+    context.fillStyle = rgba(r, g, b, a);
+    context.fillRect(0, 0, width, height);
+    return canvas;
+}
 
 ////////////////////////////////////////////////////////////////////
 // Iterator & Renderers                                           //
 ////////////////////////////////////////////////////////////////////
 
-let XYIterator = function(width, height) {
+var XYIterator = function(width, height) {
     this.width = width;
     this.height = height;
     this.x = -1;
@@ -46,7 +61,7 @@ XYIterator.prototype.next = function() {
 
 ////////////////////////////////////////////////////////////////////
 
-export function StarRenderer(canvas, r, g, b, x, y, size) {
+var StarRenderer = function(canvas, r, g, b, x, y, size) {
     this.r = r;
     this.g = g;
     this.b = b;
@@ -55,9 +70,9 @@ export function StarRenderer(canvas, r, g, b, x, y, size) {
     this.size = size;
     this.context = canvas.getContext("2d");
     this.e = 0.5;
-    let E = this.e * 2;
+    var E = this.e * 2;
     this.m = Math.pow(this.size, E);
-    let d = 0;
+    var d = 0;
     while (this.m / Math.pow(d * d, this.e + (d * d) / 10000) > 0.001) {
         d++;
     }
@@ -66,9 +81,9 @@ export function StarRenderer(canvas, r, g, b, x, y, size) {
 }
 
 StarRenderer.prototype.next = function() {
-    let next = this.iterator.next();
-    let d = Math.pow(next.x - this.side, 2) + Math.pow(next.y - this.side, 2);
-    let i = Math.min(1, this.m / Math.pow(d, this.e + d / 10000));
+    var next = this.iterator.next();
+    var d = Math.pow(next.x - this.side, 2) + Math.pow(next.y - this.side, 2);
+    var i = Math.min(1, this.m / Math.pow(d, this.e + d / 10000));
     this.context.fillStyle = rgba(this.r, this.g, this.b, i);
     this.context.fillRect(next.x + this.x - this.side, next.y + this.y - this.side, 1, 1);
     return next.done;
@@ -76,7 +91,7 @@ StarRenderer.prototype.next = function() {
 
 ////////////////////////////////////////////////////////////////////
 
-export function SunRenderer(canvas, r, g, b, x, y, size) {
+var SunRenderer = function(canvas, r, g, b, x, y, size) {
     this.r = r;
     this.g = g;
     this.b = b;
@@ -91,15 +106,15 @@ export function SunRenderer(canvas, r, g, b, x, y, size) {
 }
 
 SunRenderer.prototype.next = function() {
-    let next = this.iterator.next();
-    let d = Math.pow(next.x - this.x, 2) + Math.pow(next.y - this.y, 2);
-    let raw = this.m / Math.pow(d, this.e);
-    let i = Math.min(1, raw);
-    let q = raw - i;
-    let offset = next.y * this.iterator.width * 4 + next.x * 4;
-    let r = this.idata[offset + 0] / 255 + Math.min(1, this.r + q * 2) * i;
-    let g = this.idata[offset + 1] / 255 + Math.min(1, this.g + q * 4) * i;
-    let b = this.idata[offset + 2] / 255 + Math.min(1, this.b + q * 2) * i;
+    var next = this.iterator.next();
+    var d = Math.pow(next.x - this.x, 2) + Math.pow(next.y - this.y, 2);
+    var raw = this.m / Math.pow(d, this.e);
+    var i = Math.min(1, raw);
+    var q = raw - i;
+    var offset = next.y * this.iterator.width * 4 + next.x * 4;
+    var r = this.idata[offset + 0] / 255 + Math.min(1, this.r + q * 2) * i;
+    var g = this.idata[offset + 1] / 255 + Math.min(1, this.g + q * 4) * i;
+    var b = this.idata[offset + 2] / 255 + Math.min(1, this.b + q * 2) * i;
     this.context.fillStyle = rgba(r, g, b, 1);
     this.context.fillRect(next.x, next.y, 1, 1);
     return next.done;
@@ -107,7 +122,7 @@ SunRenderer.prototype.next = function() {
 
 ////////////////////////////////////////////////////////////////////
 
-export function NebulaRenderer(canvas, r, g, b, scale, intensity, falloff) {
+var NebulaRenderer = function(canvas, r, g, b, scale, intensity, falloff) {
     this.r = r;
     this.g = g;
     this.b = b;
@@ -123,18 +138,18 @@ NebulaRenderer.prototype.recursiveField = function(x, y, depth, divisor) {
     if (depth == 0) {
         return this.pn.noise(x / divisor, y / divisor, 0);
     }
-    let displace = this.recursiveField(x, y, depth - 1, divisor / 2);
+    var displace = this.recursiveField(x, y, depth - 1, divisor / 2);
     return this.pn.noise(x / divisor + displace, y / divisor + displace, 0);
 }
 
 NebulaRenderer.prototype.field = function(r, g, b, x, y, intensity, falloff) {
-    let i = Math.min(1, this.recursiveField(x, y, 5, 2) * intensity);
+    var i = Math.min(1, this.recursiveField(x, y, 5, 2) * intensity);
     i = Math.pow(i, falloff);
     return rgba(r, g, b, i);
 }
 
 NebulaRenderer.prototype.next = function() {
-    let next = this.iterator.next();
+    var next = this.iterator.next();
     this.context.fillStyle = this.field(this.r, this.g, this.b, next.x / this.scale, next.y / this.scale, this.intensity, this.falloff);
     this.context.fillRect(next.x, next.y, 1, 1);
     return next.done;
@@ -144,7 +159,7 @@ NebulaRenderer.prototype.next = function() {
 // SpaceVista                                                     //
 ////////////////////////////////////////////////////////////////////
 
-export function SpaceVista(seed, width, height, renderPointStars, renderStars, renderNebulae, renderSun) {
+var SpaceVista = function(seed, width, height, renderPointStars, renderStars, renderNebulae, renderSun) {
     this.width = width;
     this.height = height;
     this.seed = seed;
@@ -170,32 +185,8 @@ SpaceVista.prototype.buildQueue = function() {
     this.queue = [];
     this.op = undefined;
     Math.random = Alea(this.seed);
-    if (this.renderStars) {
-        this.queue.push("star");
-        while (Math.random() < 0.95) {
-            this.queue.push("star");
-        }
-    }
-    Math.random = Alea(this.seed);
-    if (this.renderNebulae) {
-        this.queue.push("nebula");
-        while (Math.random() < 0.5) {
-            this.queue.push("nebula");
-        }
-    }
-    Math.random = Alea(this.seed);
     if (this.renderSun) {
-        this.queue.push("sun");
-    }
-}
-
-SpaceVista.prototype.getOp = function(opCode) {
-    if (opCode == "star") {
-        return new StarRenderer(this.canvas, 1, 1, 1, Math.random() * this.width, Math.random() * this.height, Math.random() * 0.001 * this.scale);
-    } else if (opCode == "nebula") {
-        return new NebulaRenderer(this.canvas, Math.random(), Math.random(), Math.random(), this.scale / 4, Math.random() * 0.2 + 1, Math.random() * 3 + 3);
-    } else if (opCode == "sun") {
-        let r, g, b;
+        var r, g, b;
         if (Math.random() < 0.5) {
             r = 1;
             g = Math.random();
@@ -205,15 +196,36 @@ SpaceVista.prototype.getOp = function(opCode) {
             g = Math.random();
             b = 1;
         }
-        return new SunRenderer(this.canvas, r, g, b, Math.random() * this.width, Math.random() * this.height, this.scale * (Math.random() * 0.1 + 0.01));
+        this.queue.push({
+            type: "sun",
+            op: new SunRenderer(this.canvas, r, g, b, this.width /3, this.height / 2, this.scale * (Math.random() * 0.1 + 0.01))
+        });
+    }
+    Math.random = Alea(this.seed);
+    if (this.renderStars) {
+        while (Math.random() < 0.95) {
+            this.queue.push({
+                type: "star",
+                op: new StarRenderer(this.canvas, 1, 1, 1, Math.random() * this.width, Math.random() * this.height, Math.random() * 0.001 * this.scale)
+            });
+        }
+    }
+    Math.random = Alea(this.seed);
+    if (this.renderNebulae) {
+        while (Math.random() < 0.5) {
+            this.queue.push({
+                type: "nebula",
+                op: new NebulaRenderer(this.canvas, Math.random(), Math.random(), Math.random(), this.scale / 4, Math.random() * 0.2 + 1, Math.random() * 3 + 3)
+            });
+        }
     }
 }
 
 SpaceVista.prototype.renderField = function() {
-    for (let i = 0; i < this.width * this.height / 512; i++) {
-        let x = Math.random() * this.width;
-        let y = Math.random() * this.height;
-        let c = Math.random();
+    for (var i = 0; i < this.width * this.height / 512; i++) {
+        var x = Math.random() * this.width;
+        var y = Math.random() * this.height;
+        var c = Math.random();
         this.ctx.fillStyle = rgba(1, 1, 1, c * c * c);
         this.ctx.fillRect(x, y, 1, 1);
     }
@@ -227,46 +239,94 @@ SpaceVista.prototype.update = function() {
                 done: 1
             }
         }
-        this.op = this.getOp(this.queue[this.queueIndex]);
+        this.op = this.queue[this.queueIndex].op;
     }
-    let t0 = Date.now()
-    let done = 0;
+    var t0 = Date.now()
+    var done = 0;
     while (Date.now() - t0 < 20 && done < 1) {
         done = this.op.next();
     }
     if (done == 1) {
         this.op = undefined;
         this.queueIndex++;
-        if (this.queue[this.queueIndex] != this.queue[this.queueIndex - 1]) {
+        if (this.queue[this.queueIndex].type != this.queue[this.queueIndex - 1].type) {
             Math.random = Alea(this.seed);
         }
     }
     return {
-        op: this.queue[this.queueIndex],
+        op: this.queue[this.queueIndex].type,
         done: done
     };
 }
 
+function Alea() {
+    return (function(args) {
+        var s0 = 0;
+        var s1 = 0;
+        var s2 = 0;
+        var c = 1;
+        if (args.length == 0) {
+            args = [+new Date];
+        }
+        var mash = Mash();
+        s0 = mash(' ');
+        s1 = mash(' ');
+        s2 = mash(' ');
+        for (var i = 0; i < args.length; i++) {
+            s0 -= mash(args[i]);
+            if (s0 < 0) {
+                s0 += 1;
+            }
+            s1 -= mash(args[i]);
+            if (s1 < 0) {
+                s1 += 1;
+            }
+            s2 -= mash(args[i]);
+            if (s2 < 0) {
+                s2 += 1;
+            }
+        }
+        mash = null;
+        var random = function() {
+            var t = 2091639 * s0 + c * 2.3283064365386963e-10;
+            s0 = s1;
+            s1 = s2;
+            return s2 = t - (c = t | 0);
+        };
+        random.uint32 = function() {
+            return random() * 0x100000000;
+        };
+        random.fract53 = function() {
+            return random() +
+                (random() * 0x200000 | 0) * 1.1102230246251565e-16;
+        };
+        random.version = 'Alea 0.9';
+        random.args = args;
+        return random;
 
-////////////////////////////////////////////////////////////////////
-// Utility functions                                              //
-////////////////////////////////////////////////////////////////////
+    }(Array.prototype.slice.call(arguments)));
+};
 
-function rgba(r, g, b, a) {
-    r = Math.floor(r * 255);
-    g = Math.floor(g * 255);
-    b = Math.floor(b * 255);
-    return "rgba(" + r + "," + g + "," + b + "," + a + ")";
-}
+function Mash() {
+    var n = 0xefc8249d;
 
-function rgbaCanvas(width, height, r, g, b, a) {
-    let canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    let context = canvas.getContext("2d");
-    context.fillStyle = rgba(r, g, b, a);
-    context.fillRect(0, 0, width, height);
-    return canvas;
+    var mash = function(data) {
+        data = data.toString();
+        for (var i = 0; i < data.length; i++) {
+            n += data.charCodeAt(i);
+            var h = 0.02519603282416938 * n;
+            n = h >>> 0;
+            h -= n;
+            h *= n;
+            n = h >>> 0;
+            h -= n;
+            n += h * 0x100000000;
+        }
+        return (n >>> 0) * 2.3283064365386963e-10;
+    };
+
+    mash.version = 'Mash 0.9';
+    return mash;
 }
 
 function Perlin(seed) {
@@ -349,74 +409,4 @@ function Perlin(seed) {
     this.noise = function(x, y, z) {
         return 0.5 * noise.noise(x, y, z) + 0.5;
     }
-}
-
-function Alea() {
-    return (function(args) {
-        var s0 = 0;
-        var s1 = 0;
-        var s2 = 0;
-        var c = 1;
-        if (args.length == 0) {
-            args = [+new Date];
-        }
-        var mash = Mash();
-        s0 = mash(' ');
-        s1 = mash(' ');
-        s2 = mash(' ');
-        for (var i = 0; i < args.length; i++) {
-            s0 -= mash(args[i]);
-            if (s0 < 0) {
-                s0 += 1;
-            }
-            s1 -= mash(args[i]);
-            if (s1 < 0) {
-                s1 += 1;
-            }
-            s2 -= mash(args[i]);
-            if (s2 < 0) {
-                s2 += 1;
-            }
-        }
-        mash = null;
-        var random = function() {
-            var t = 2091639 * s0 + c * 2.3283064365386963e-10;
-            s0 = s1;
-            s1 = s2;
-            return s2 = t - (c = t | 0);
-        };
-        random.uint32 = function() {
-            return random() * 0x100000000;
-        };
-        random.fract53 = function() {
-            return random() +
-                (random() * 0x200000 | 0) * 1.1102230246251565e-16;
-        };
-        random.version = 'Alea 0.9';
-        random.args = args;
-        return random;
-
-    }(Array.prototype.slice.call(arguments)));
-};
-
-function Mash() {
-    var n = 0xefc8249d;
-
-    var mash = function(data) {
-        data = data.toString();
-        for (var i = 0; i < data.length; i++) {
-            n += data.charCodeAt(i);
-            var h = 0.02519603282416938 * n;
-            n = h >>> 0;
-            h -= n;
-            h *= n;
-            n = h >>> 0;
-            h -= n;
-            n += h * 0x100000000;
-        }
-        return (n >>> 0) * 2.3283064365386963e-10;
-    };
-
-    mash.version = 'Mash 0.9';
-    return mash;
 }

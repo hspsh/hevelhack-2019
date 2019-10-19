@@ -1,0 +1,48 @@
+{
+    "planet": {
+      "slots": [
+        "nameStart",
+        "nameEnd",
+        "nameNumber",
+        "prime",
+        "sun",
+        "soilColor",
+        "rockColor",
+        "surface",
+        "climate",
+        "landscape",
+        "special",
+        "symmetry",
+        "animalColor",
+        "animalTexture",
+        "flora",
+        "leafColor",
+        "plantTexture",
+        "plantDecoColor",
+        "plantDeco",
+        "fauna",
+        "lifeSpecial"
+      ],
+      "vals": {
+        "desc": "<h1>{nameStart}{nameEnd} {nameNumber}</h1>{surface:desc}<br><br>{fauna:desc}<br><br>{special:desc}",
+        "hab": "{surface:hab} {climate:hab} {flora:hab} {fauna:hab} {lifeSpecial:hab} {special:hab}",
+        "sze": "{surface:sze} {climate:sze} {flora:sze} {fauna:sze} {lifeSpecial:sze} {special:sze}",
+        "min": "3 {surface:min} {climate:min} {flora:min} {fauna:min} {lifeSpecial:min} {special:min}",
+        "sci": "3 {surface:sci} {climate:sci} {flora:sci} {fauna:sci} {lifeSpecial:sci} {special:sci}",
+        "watL": "{surface:watL}",
+        "temp": "{climate:temp}",
+        "rive": "{surface:rive}",
+        "coldC": "{surface:coldC}",
+        "temperateC": "{surface:temperateC}",
+        "warmC": "{surface:warmC}",
+        "hotC": "{surface:hotC}",
+        "speckleC": "{surface:speckleC}",
+        "clouds": "{surface:clouds} {special:clouds}",
+        "cloudC": "{special:cloudC}",
+        "rotspeedMult": "1.0 {special:rotspeedMult}",
+        "lightC": "{sun:lightC}",
+        "hazeC": "{special:hazeC}",
+        "oceanC": "{special:oceanC}"
+      }
+    }
+  }
