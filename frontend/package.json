@@ -1,0 +1,38 @@
+{
+  "name": "hevel-hack",
+  "version": "1.0.0",
+  "description": "Hevelianum Hackaton solution",
+  "main": "make",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hs3city/hevel-hack.git"
+  },
+  "keywords": [
+    "hevelianum"
+  ],
+  "author": "hs3",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hs3city/hevel-hack/issues"
+  },
+  "homepage": "https://github.com/hs3city/hevel-hack#readme",
+  "dependencies": {
+    "materialize-css": "^1.0.0"
+  },
+  "devDependencies": {
+    "css-loader": "^3.2.0",
+    "file-loader": "^4.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.0",
+    "webpack": "^4.41.1",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.2",
+    "webpack-pwa-manifest": "^4.0.0",
+    "workbox-webpack-plugin": "^4.3.1"
+  }
+}
