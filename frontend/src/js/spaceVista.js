@@ -4,14 +4,14 @@
 // Utility functions                                              //
 ////////////////////////////////////////////////////////////////////
 
-var rgba = function(r, g, b, a) {
+var rgba = function (r, g, b, a) {
     r = Math.floor(r * 255);
     g = Math.floor(g * 255);
     b = Math.floor(b * 255);
     return "rgba(" + r + "," + g + "," + b + "," + a + ")";
 }
 
-var rgbaCanvas = function(width, height, r, g, b, a) {
+var rgbaCanvas = function (width, height, r, g, b, a) {
     var canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
@@ -25,14 +25,14 @@ var rgbaCanvas = function(width, height, r, g, b, a) {
 // Iterator & Renderers                                           //
 ////////////////////////////////////////////////////////////////////
 
-var XYIterator = function(width, height) {
+var XYIterator = function (width, height) {
     this.width = width;
     this.height = height;
     this.x = -1;
     this.y = 0;
 }
 
-XYIterator.prototype.next = function() {
+XYIterator.prototype.next = function () {
     if (this.y == this.height) {
         return {
             x: this.width - 1,
@@ -61,7 +61,7 @@ XYIterator.prototype.next = function() {
 
 ////////////////////////////////////////////////////////////////////
 
-var StarRenderer = function(canvas, r, g, b, x, y, size) {
+var StarRenderer = function (canvas, r, g, b, x, y, size) {
     this.r = r;
     this.g = g;
     this.b = b;
@@ -80,7 +80,7 @@ var StarRenderer = function(canvas, r, g, b, x, y, size) {
     this.iterator = new XYIterator(this.side * 2, this.side * 2);
 }
 
-StarRenderer.prototype.next = function() {
+StarRenderer.prototype.next = function () {
     var next = this.iterator.next();
     var d = Math.pow(next.x - this.side, 2) + Math.pow(next.y - this.side, 2);
     var i = Math.min(1, this.m / Math.pow(d, this.e + d / 10000));
@@ -91,7 +91,7 @@ StarRenderer.prototype.next = function() {
 
 ////////////////////////////////////////////////////////////////////
 
-var SunRenderer = function(canvas, r, g, b, x, y, size) {
+var SunRenderer = function (canvas, r, g, b, x, y, size) {
     this.r = r;
     this.g = g;
     this.b = b;
@@ -105,7 +105,7 @@ var SunRenderer = function(canvas, r, g, b, x, y, size) {
     this.idata = this.context.getImageData(0, 0, canvas.width, canvas.height).data;
 }
 
-SunRenderer.prototype.next = function() {
+SunRenderer.prototype.next = function () {
     var next = this.iterator.next();
     var d = Math.pow(next.x - this.x, 2) + Math.pow(next.y - this.y, 2);
     var raw = this.m / Math.pow(d, this.e);
@@ -122,7 +122,7 @@ SunRenderer.prototype.next = function() {
 
 ////////////////////////////////////////////////////////////////////
 
-var NebulaRenderer = function(canvas, r, g, b, scale, intensity, falloff) {
+var NebulaRenderer = function (canvas, r, g, b, scale, intensity, falloff) {
     this.r = r;
     this.g = g;
     this.b = b;
@@ -134,7 +134,7 @@ var NebulaRenderer = function(canvas, r, g, b, scale, intensity, falloff) {
     this.iterator = new XYIterator(canvas.width, canvas.height);
 }
 
-NebulaRenderer.prototype.recursiveField = function(x, y, depth, divisor) {
+NebulaRenderer.prototype.recursiveField = function (x, y, depth, divisor) {
     if (depth == 0) {
         return this.pn.noise(x / divisor, y / divisor, 0);
     }
@@ -142,13 +142,13 @@ NebulaRenderer.prototype.recursiveField = function(x, y, depth, divisor) {
     return this.pn.noise(x / divisor + displace, y / divisor + displace, 0);
 }
 
-NebulaRenderer.prototype.field = function(r, g, b, x, y, intensity, falloff) {
+NebulaRenderer.prototype.field = function (r, g, b, x, y, intensity, falloff) {
     var i = Math.min(1, this.recursiveField(x, y, 5, 2) * intensity);
     i = Math.pow(i, falloff);
     return rgba(r, g, b, i);
 }
 
-NebulaRenderer.prototype.next = function() {
+NebulaRenderer.prototype.next = function () {
     var next = this.iterator.next();
     this.context.fillStyle = this.field(this.r, this.g, this.b, next.x / this.scale, next.y / this.scale, this.intensity, this.falloff);
     this.context.fillRect(next.x, next.y, 1, 1);
@@ -159,69 +159,64 @@ NebulaRenderer.prototype.next = function() {
 // SpaceVista                                                     //
 ////////////////////////////////////////////////////////////////////
 
-var SpaceVista = function(seed, width, height, renderPointStars, renderStars, renderNebulae, renderSun) {
+var SpaceVista = function (seed, width, height, renderSun) {
     this.width = width;
     this.height = height;
     this.seed = seed;
-    this.renderStars = renderStars;
-    this.renderNebulae = renderNebulae;
     this.renderSun = renderSun;
     this.scale = Math.max(width, height);
     this.initializeSurfaces();
     Math.random = Alea(this.seed);
-    if (renderPointStars) {
-        this.renderField();
-    }
+    this.renderField();
     this.buildQueue();
 }
 
-SpaceVista.prototype.initializeSurfaces = function() {
+SpaceVista.prototype.initializeSurfaces = function () {
     this.canvas = rgbaCanvas(this.width, this.height, 0, 0, 0, 1);
     this.ctx = this.canvas.getContext("2d");
 }
 
-SpaceVista.prototype.buildQueue = function() {
+SpaceVista.prototype.buildQueue = function () {
     this.queueIndex = 0;
     this.queue = [];
     this.op = undefined;
     Math.random = Alea(this.seed);
-    if (this.renderSun) {
-        var r, g, b;
-        if (Math.random() < 0.5) {
-            r = 1;
-            g = Math.random();
-            b = Math.random() * 0.25;
-        } else {
-            r = Math.random() * 0.25;
-            g = Math.random();
-            b = 1;
-        }
+    var r, g, b;
+    if (Math.random() < 0.5) {
+        r = 1;
+        g = Math.random();
+        b = Math.random() * 0.25;
+    } else {
+        r = Math.random() * 0.25;
+        g = Math.random();
+        b = 1;
+    }
+    
+    this.queue.push({
+        type: "sun",
+        op: new SunRenderer(this.canvas, this.renderSun.color.r, this.renderSun.color.g, this.renderSun.color.b, this.width / 2, this.height / 2, this.scale * (this.renderSun.size * 0.1))
+    });
+    /*
+    Math.random = Alea(this.seed);
+    this.queue.push({
+        type: "nebula",
+        op: new NebulaRenderer(this.canvas, Math.random(), Math.random(), Math.random(), this.scale / 4, Math.random() * 0.2 + 1, Math.random() * 3 + 3)
+    });
+    */
+    Math.random = Alea(this.seed);
+    while (Math.random() < 0.95) {
         this.queue.push({
-            type: "sun",
-            op: new SunRenderer(this.canvas, r, g, b, this.width /3, this.height / 2, this.scale * (Math.random() * 0.1 + 0.01))
+            type: "star",
+            op: new StarRenderer(this.canvas, 1, 1, 1, Math.random() * this.width, Math.random() * this.height, Math.random() * 0.001 * this.scale)
         });
     }
-    Math.random = Alea(this.seed);
-    if (this.renderStars) {
-        while (Math.random() < 0.95) {
-            this.queue.push({
-                type: "star",
-                op: new StarRenderer(this.canvas, 1, 1, 1, Math.random() * this.width, Math.random() * this.height, Math.random() * 0.001 * this.scale)
-            });
-        }
-    }
-    Math.random = Alea(this.seed);
-    if (this.renderNebulae) {
-        while (Math.random() < 0.5) {
-            this.queue.push({
-                type: "nebula",
-                op: new NebulaRenderer(this.canvas, Math.random(), Math.random(), Math.random(), this.scale / 4, Math.random() * 0.2 + 1, Math.random() * 3 + 3)
-            });
-        }
-    }
+
+    
+
 }
 
-SpaceVista.prototype.renderField = function() {
+
+SpaceVista.prototype.renderField = function () {
     for (var i = 0; i < this.width * this.height / 512; i++) {
         var x = Math.random() * this.width;
         var y = Math.random() * this.height;
@@ -231,7 +226,7 @@ SpaceVista.prototype.renderField = function() {
     }
 }
 
-SpaceVista.prototype.update = function() {
+SpaceVista.prototype.update = function () {
     if (this.op == undefined) {
         if (this.queueIndex == this.queue.length) {
             return {
@@ -243,7 +238,7 @@ SpaceVista.prototype.update = function() {
     }
     var t0 = Date.now()
     var done = 0;
-    while (Date.now() - t0 < 20 && done < 1) {
+    while (Date.now() - t0 < 50 && done < 1) {
         done = this.op.next();
     }
     if (done == 1) {
@@ -260,7 +255,7 @@ SpaceVista.prototype.update = function() {
 }
 
 function Alea() {
-    return (function(args) {
+    return (function (args) {
         var s0 = 0;
         var s1 = 0;
         var s2 = 0;
@@ -287,16 +282,16 @@ function Alea() {
             }
         }
         mash = null;
-        var random = function() {
+        var random = function () {
             var t = 2091639 * s0 + c * 2.3283064365386963e-10;
             s0 = s1;
             s1 = s2;
             return s2 = t - (c = t | 0);
         };
-        random.uint32 = function() {
+        random.uint32 = function () {
             return random() * 0x100000000;
         };
-        random.fract53 = function() {
+        random.fract53 = function () {
             return random() +
                 (random() * 0x200000 | 0) * 1.1102230246251565e-16;
         };
@@ -310,7 +305,7 @@ function Alea() {
 function Mash() {
     var n = 0xefc8249d;
 
-    var mash = function(data) {
+    var mash = function (data) {
         data = data.toString();
         for (var i = 0; i < data.length; i++) {
             n += data.charCodeAt(i);
@@ -330,7 +325,7 @@ function Mash() {
 }
 
 function Perlin(seed) {
-    var ClassicalNoise = function(r) {
+    var ClassicalNoise = function (r) {
         if (r == undefined) r = Math;
         this.grad3 = [
             [1, 1, 0],
@@ -355,16 +350,16 @@ function Perlin(seed) {
             this.perm[i] = this.p[i & 255];
         }
     };
-    ClassicalNoise.prototype.dot = function(g, x, y, z) {
+    ClassicalNoise.prototype.dot = function (g, x, y, z) {
         return g[0] * x + g[1] * y + g[2] * z;
     };
-    ClassicalNoise.prototype.mix = function(a, b, t) {
+    ClassicalNoise.prototype.mix = function (a, b, t) {
         return (1.0 - t) * a + t * b;
     };
-    ClassicalNoise.prototype.fade = function(t) {
+    ClassicalNoise.prototype.fade = function (t) {
         return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
     };
-    ClassicalNoise.prototype.noise = function(x, y, z) {
+    ClassicalNoise.prototype.noise = function (x, y, z) {
         var X = Math.floor(x);
         var Y = Math.floor(y);
         var Z = Math.floor(z);
@@ -406,7 +401,7 @@ function Perlin(seed) {
         random: Alea(seed)
     };
     var noise = new ClassicalNoise(rand);
-    this.noise = function(x, y, z) {
+    this.noise = function (x, y, z) {
         return 0.5 * noise.noise(x, y, z) + 0.5;
     }
 }

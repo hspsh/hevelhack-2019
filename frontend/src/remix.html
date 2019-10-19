@@ -41,7 +41,28 @@
   </header>
 
   <main>
-    <div id="details"></div>
+    <div id="app">
+      <div id="details">
+          <form action="#">
+            <p class="range-field">
+              <input type="range" id="test5" min="0" max="100" v-model="vTemperature"/>
+            </p>
+            <p class="range-field">
+                <input type="range" id="eee" min="0" max="100" v-model="vWaterLevel"/>
+            </p>
+            <p class="range-field">
+                <input type="range" id="www" min="0" max="100" v-model="vRivers"/>
+            </p>
+            <p class="range-field">
+                <input type="range" id="www" min="0" max="100" v-model="vLight"/>
+            </p>
+            <p class="range-field">
+                <input type="range" id="www" min="0" max="100" v-model="vZLight"/>
+            </p>
+          </form>
+      </div>
+      <planet-render></planet-render>
+    </div>
     <div id="view">
       <canvas id="planet-view"></canvas>
     </div>
@@ -76,6 +97,8 @@
     }
    
   </script>
+
+  <!-- <script type="notjs" src="plik.something" /> -->
 
   <script id="planet-shader" type="notjs">
     #ifdef GL_ES
@@ -269,6 +292,7 @@
       gl_FragColor = planet(coord.xy / resolution.xy), 1.0;
   }
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://code.jquery.com/jquery-2.2.4.min.js"
     integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
   <script src="/js/planet.js"></script>
