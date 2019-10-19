@@ -18,7 +18,7 @@
 
 
   <style>
-    #planet-view {
+    .planet-view {
       position: fixed;
       right: 2em;
       width: 400px;
@@ -45,23 +45,23 @@
       <div id="details">
           <form action="#">
             <p class="range-field">
-              <input type="range" id="test5" min="0" max="100" v-model="vTemperature"/>
+              <input type="range" id="test5" min="0" max="100" v-model="planetParams.vTemperature"/>
             </p>
             <p class="range-field">
-                <input type="range" id="eee" min="0" max="100" v-model="vWaterLevel"/>
+                <input type="range" id="eee" min="0" max="100" v-model="planetParams.vWaterLevel"/>
             </p>
             <p class="range-field">
-                <input type="range" id="www" min="0" max="100" v-model="vRivers"/>
+                <input type="range" id="www" min="0" max="100" v-model="planetParams.vRivers"/>
             </p>
             <p class="range-field">
-                <input type="range" id="www" min="0" max="100" v-model="vLight"/>
+                <input type="range" id="www" min="0" max="100" v-model="planetParams.vLight"/>
             </p>
             <p class="range-field">
-                <input type="range" id="www" min="0" max="100" v-model="vZLight"/>
+                <input type="range" id="www" min="0" max="100" v-model="planetParams.vZLight"/>
             </p>
           </form>
       </div>
-      <planet-render></planet-render>
+      <planet-render v-bind:planet-params="planetParams"></planet-render>
     </div>
     <div id="view">
       <canvas id="planet-view"></canvas>

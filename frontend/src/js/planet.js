@@ -193,14 +193,14 @@ renderPlanet();
 var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 var t = new Date().getTime() % 1000000;
 
-function nextFrame() {
-  t = new Date().getTime() % 1000000;
-  renderPlanet();
-  requestAnimationFrame(nextFrame);
-}
+// function nextFrame() {
+//   t = new Date().getTime() % 1000000;
+//   renderPlanet();
+//   requestAnimationFrame(nextFrame);
+// }
 
-// Once everything is set up, start game loop.
-requestAnimationFrame(nextFrame);
+// // Once everything is set up, start game loop.
+// requestAnimationFrame(nextFrame);
 
 function doParse(text) {
   var struct = null;
@@ -394,6 +394,8 @@ fetch('./assets/slots.json')
 
 
 Vue.component("planet-render", {
+  props: ['planetParams'],
+
   data: function () {
     // var canvas = this.$refs.canvas;
     // console.log(this.$refs)
@@ -409,34 +411,34 @@ Vue.component("planet-render", {
     // so we can change them
 
     return {
-      
-      // locations to vars in shader program
+      t: new Date().getTime() % 1000000,
 
+      // planetParams: this.planetParams,
 
-      vWaterLevel: 0,
-      vRivers: 0,
-      vTemperature: 0,
-      vCold: [0.5, 0.5, 0.5],
-      vOcean: [0.5, 0.5, 0.5],
-      vTemperate: [0.5, 0.5, 0.5],
-      vWarm: [0.5, 0.5, 0.5],
-      vHot: [0.5, 0.5, 0.5],
-      vSpeckle: [0.5, 0.5, 0.5],
-      vClouds: [0.9, 0.9, 0.9],
-      vCloudiness: 0.35,
-      vLightColor: [1.0, 1.0, 1.0],
-      vHaze: [0.15, 0.15, 0.2],
+      // vWaterLevel: 0,
+      // vRivers: 0,
+      // vTemperature: 0,
+      // vCold: [0.5, 0.5, 0.5],
+      // vOcean: [0.5, 0.5, 0.5],
+      // vTemperate: [0.5, 0.5, 0.5],
+      // vWarm: [0.5, 0.5, 0.5],
+      // vHot: [0.5, 0.5, 0.5],
+      // vSpeckle: [0.5, 0.5, 0.5],
+      // vClouds: [0.9, 0.9, 0.9],
+      // vCloudiness: 0.35,
+      // vLightColor: [1.0, 1.0, 1.0],
+      // vHaze: [0.15, 0.15, 0.2],
 
-      vAngle: 0.3,
-      vRotspeed: 0.01,
-      vLight: 1.9,
-      vZLight: 0.5,
-      vModValue: 29,
-      vNoiseOffset: [0, 0],
-      vNoiseScale: [11, 8],
-      vNoiseScale2: [200, 200],
-      vNoiseScale3: [50, 50],
-      vCloudNoise: [6, 30],
+      // vAngle: 0.3,
+      // vRotspeed: 0.01,
+      // vLight: 1.9,
+      // vZLight: 0.5,
+      // vModValue: 29,
+      // vNoiseOffset: [0, 0],
+      // vNoiseScale: [11, 8],
+      // vNoiseScale2: [200, 200],
+      // vNoiseScale3: [50, 50],
+      // vCloudNoise: [6, 30],
     }
   },
   methods: {
@@ -483,6 +485,85 @@ Vue.component("planet-render", {
       this.uRivers = this.getUniformLocation("rivers")
       this.uTemperature = this.getUniformLocation("temperature")
       this.uHaze = this.getUniformLocation("haze")
+
+      this.positionBuffer = this.gl.createBuffer();
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+      // three 2d points
+      this.positions = [
+        -1, -1,
+        -1, 1,
+        1, 1,
+        -1, -1,
+        1, 1,
+        1, -1
+      ];
+      this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(positions), this.gl.STATIC_DRAW);
+    },
+
+    renderPlanet() {
+      let gl = this.gl
+      resize(gl.canvas);
+      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    
+      // Clear the canvas
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      // Tell it to use our program (pair of shaders)
+      gl.useProgram(this.program);
+      gl.enableVertexAttribArray(this.positionAttributeLocation);
+      // Bind the position buffer.
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
+    
+      // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+      var size = 2; // 2 components per iteration
+      var type = gl.FLOAT; // the data is 32bit floats
+      var normalize = false; // don't normalize the data
+      var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
+      var offset = 0; // start at the beginning of the buffer
+      gl.vertexAttribPointer(
+        this.positionAttributeLocation, size, type, normalize, stride, offset)
+    
+      gl.uniform1i(this.uCities, 0);
+      gl.uniform1f(this.uTime, this.$data.t * 0.001); // qqDPS
+      gl.uniform1f(this.uLeft, -10);
+      gl.uniform1f(this.uTop, -10);
+      gl.uniform2f(this.uResolution, 380, 380);
+      gl.uniform1f(this.uAngle, this.planetParams.vAngle);
+      gl.uniform1f(this.uRotspeed, this.planetParams.vRotspeed);
+      gl.uniform1f(this.uLight, this.planetParams.vLight);
+      gl.uniform1f(this.uZLight, this.planetParams.vZLight);
+      gl.uniform3fv(this.uLightColor, this.planetParams.vLightColor);
+      gl.uniform1f(this.uModValue, this.planetParams.vModValue);
+      gl.uniform2fv(this.uNoiseOffset, this.planetParams.vNoiseOffset);
+      gl.uniform2fv(this.uNoiseScale, this.planetParams.vNoiseScale);
+      gl.uniform2fv(this.uNoiseScale2, this.planetParams.vNoiseScale2);
+      gl.uniform2fv(this.uNoiseScale3, this.planetParams.vNoiseScale3);
+      gl.uniform2fv(this.uCloudNoise, this.planetParams.vCloudNoise);
+      gl.uniform1f(this.uCloudiness, this.planetParams.vCloudiness);
+      gl.uniform3fv(this.uOcean, this.planetParams.vOcean);
+      gl.uniform3f(this.uIce, 250 / 255.0, 250 / 255.0, 250 / 255.0);
+      gl.uniform3fv(this.uCold, this.planetParams.vCold); //53/255.0, 102/255.0, 100/255.0);
+      gl.uniform3fv(this.uTemperate, this.planetParams.vTemperate); //79/255.0, 109/255.0, 68/255.0);
+      gl.uniform3fv(this.uWarm, this.planetParams.vWarm); //119/255.0, 141/255.0, 82/255.0);
+      gl.uniform3fv(this.uHot, this.planetParams.vHot); //223/255.0, 193/255.0, 148/255.0);
+      gl.uniform3fv(this.uSpeckle, this.planetParams.vSpeckle);
+      gl.uniform3fv(this.uClouds, this.planetParams.vClouds);
+      gl.uniform3fv(this.uHaze, this.planetParams.vHaze);
+      gl.uniform1f(this.uWaterLevel, this.planetParams.vWaterLevel);
+      gl.uniform1f(this.uRivers, this.planetParams.vRivers);
+      gl.uniform1f(this.uTemperature, this.planetParams.vTemperature);
+    
+      var primitiveType = gl.TRIANGLES;
+      var offset = 0;
+      var count = 6;
+      gl.drawArrays(primitiveType, offset, count);
+      console.log("rendered")
+    },
+
+    _nextFrame() {
+      this.t = new Date().getTime() % 1000000;
+      this.renderPlanet();
+      requestAnimationFrame(this._nextFrame);
     }
   },
   mounted: function () {
@@ -490,13 +571,45 @@ Vue.component("planet-render", {
     this.buildShaders();
     this.getAllUniformLocations();
     console.log(this.$data);
+
+    this.renderPlanet();
+       
+    // Once everything is set up, start game loop.
+    requestAnimationFrame(this._nextFrame);
   },
-  template: '<canvas ref="canvas"></canvas>',
+  template: '<canvas ref="canvas" class="planet-view"></canvas>',
 })
 
 var vm = new Vue({
   el: '#app',
-  data: data
+  data: {
+    planetParams: {
+      vWaterLevel: 0,
+      vRivers: 0,
+      vTemperature: 0,
+      vCold: [0.5, 0.5, 0.5],
+      vOcean: [0.5, 0.5, 0.5],
+      vTemperate: [0.5, 0.5, 0.5],
+      vWarm: [0.5, 0.5, 0.5],
+      vHot: [0.5, 0.5, 0.5],
+      vSpeckle: [0.5, 0.5, 0.5],
+      vClouds: [0.9, 0.9, 0.9],
+      vCloudiness: 0.35,
+      vLightColor: [1.0, 1.0, 1.0],
+      vHaze: [0.15, 0.15, 0.2],
+
+      vAngle: 0.3,
+      vRotspeed: 0.01,
+      vLight: 1.9,
+      vZLight: 0.5,
+      vModValue: 29,
+      vNoiseOffset: [0, 0],
+      vNoiseScale: [11, 8],
+      vNoiseScale2: [200, 200],
+      vNoiseScale3: [50, 50],
+      vCloudNoise: [6, 30],
+    }
+  }
 })
 
 // jQuery.ajax({

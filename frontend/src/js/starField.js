@@ -9,7 +9,7 @@ document.addEventListener('hashchange', () => {
 });
 
 function init() {
-    let settings = JSON.parse(atob(location.hash.substr(1)));
+    let settings = window.settings;
     container = document.createElement("div");
     container.id = "starField";
     document.getElementsByTagName("main")[0].appendChild(container);
