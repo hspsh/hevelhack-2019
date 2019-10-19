@@ -1,1 +1,15 @@
 @import "~materialize-css/sass/materialize.scss";
+
+html, body {
+    overflow: hidden;
+}
+
+nav {
+    background-color: black;
+}
+
+#starField {
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
