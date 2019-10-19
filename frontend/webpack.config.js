@@ -31,8 +31,8 @@ module.exports = {
             name: 'Exoplanety w Hevelianum',
             short_name: 'Hevelianum',
             description: 'Hevelianum',
-            background_color: '#ff5722',
-            theme_color: '#ff5722',
+            background_color: '#fff',
+            theme_color: '#fff',
             start_url: '/?utm_source=a2hs',
             display: 'standalone',
             ios: {
