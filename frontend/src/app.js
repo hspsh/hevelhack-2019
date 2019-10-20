@@ -23,8 +23,8 @@ var vm = new Vue({
       star_sp_type: "M9"
     },
     starParams: {
-      seed: 5349408744368,
-      temperature: 10,
+      seed: Math.random() * 9999999999999,
+      temperature: kelvinToRGB(Math.random() * 4000),
       size: Math.random()
     },
     planetParams: {
@@ -41,7 +41,7 @@ var vm = new Vue({
       vSpeckle: [0.5, 0.5, 0.5],
       vClouds: [0.9, 0.9, 0.9],
       vCloudiness: 0.35,
-      vLightColor: [1.0, 1.0, 1.0],
+      vLightColor: kelvinToRGB(Math.random() * 4000),
       vHaze: [0.15, 0.15, 0.2],
 
 
