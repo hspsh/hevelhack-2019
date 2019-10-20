@@ -39,16 +39,16 @@
         <div class="card-content white-text">
           <form action="#">
             <p class="range-field">
-              vTemperature
-              <input type="range" id="test5" min="0" max="100" v-model="planetParams.vTemperature" />
+              Radius
+              <input type="range" id="test5" min="0" max="100" v-model="exoplanetParams.radius" />
             </p>
             <p class="range-field">
-              vWaterLevel
-              <input type="range" id="eee" min="0" max="100" v-model="planetParams.vWaterLevel" />
+              Mass
+              <input type="range" id="eee" min="0" max="100" v-model="exoplanetParams.mass" />
             </p>
             <p class="range-field">
-              vRivers
-              <input type="range" id="www" min="0" max="100" v-model="planetParams.vRivers" />
+              Temperature
+              <input type="range" id="www" min="-100" max="100" v-model="exoplanetParams.temperature" />
             </p>
             <div v-if="debug">
               <h5>Debug</h5>

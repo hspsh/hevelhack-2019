@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#FFF">
+  <title>Hevelianum</title>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="style.css">
+
+
+</head>
+
+<body id="top" class="scrollspy">
+  <header>
+    <div class="navbar-fixed">
+      <nav id="nav_f" class="default_color" role="navigation">
+        <div class="container">
+          <div class="nav-wrapper">
+            <a href="#" id="logo-container" class="brand-logo center">Egzoplanety w Hevelianum</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="valign-wrapper white-text">
+    <div id="listing">
+        <h3>Planet listing</h3>
+        <planet-listing></planet-listing>
+      <star-render v-bind:star-params="starParams"></star-render>
+    </div>
+    <div id="landing">
+      <h5 class="center-align">Czym są Egzoplanety?</h5>
+      <p>Egzoplaneta to inaczej planeta pozasłoneczna, czyli każda planeta okrążająca inną gwiazdę na niebie. Do nie
+        dawna myślano że nasz Układ Słoneczny jest wyjątkowy w posiadaniu planet. Jednak ostatnie badania nieba
+        zasugerowały że takich planet jak ziemia może istnieć wiele więcej... </p>
+      <a class="waves-effect waves-light btn" href="remix.html">Buduj</a>
+      <a class="waves-effect waves-light btn" href="detail.html">Szukaj</a>
+    </div>
+  </main>
+</body>
+
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="./js/spaceVista.js"></script>
+<script src="./js/starField.js"></script>
+<script src="./js/planet.js"></script>
+<script src="./app.js"></script>
+
+</html>

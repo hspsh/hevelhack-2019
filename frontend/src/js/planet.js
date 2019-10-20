@@ -94,11 +94,13 @@ Vue.component("planet-render", {
       gl.vertexAttribPointer(
         this.positionAttributeLocation, size, type, normalize, stride, offset)
 
+      let planetRadius = 380 / (1 + Math.exp(this.planetParams.radius / 100)) + 190;
+      console.log(planetRadius)
       gl.uniform1i(this.uCities, 0);
       gl.uniform1f(this.uTime, this.$data.t * 0.001); // qqDPS
-      gl.uniform1f(this.uLeft, -10);
-      gl.uniform1f(this.uTop, -10);
-      gl.uniform2f(this.uResolution, 380, 380);
+      gl.uniform1f(this.uLeft, -(400 - planetRadius) / 2);
+      gl.uniform1f(this.uTop, -(400 - planetRadius) / 2);
+      gl.uniform2f(this.uResolution, planetRadius, planetRadius);
       gl.uniform1f(this.uAngle, this.planetParams.vAngle);
       gl.uniform1f(this.uRotspeed, this.planetParams.vRotspeed);
       gl.uniform1f(this.uLight, this.planetParams.vLight);
@@ -295,8 +297,8 @@ function doDisplay(result) {
   console.log("Displaying");
   jQuery("body").css("background-position", Math.ceil(Math.random() * 2000) + "px " + Math.ceil(Math.random() * 2000) + "px");
   jQuery("#c").
-  css("top", (jQuery(window).innerHeight() / 2 - jQuery("#c").height() / 2) + "px").
-  css("left", (jQuery(window).innerWidth() / 2 - jQuery("#c").width() / 2) + "px");
+    css("top", (jQuery(window).innerHeight() / 2 - jQuery("#c").height() / 2) + "px").
+    css("left", (jQuery(window).innerWidth() / 2 - jQuery("#c").width() / 2) + "px");
   jQuery("#txt").html(doExpand(result.struct.vals["desc"], result));
   jQuery("#stats").html(
     "Habitability: " + (Math.max(1, Math.min(9, eval(doExpand(result.struct.vals["hab"], result)))) * 10) + "%<br>" +
@@ -380,13 +382,15 @@ fetch('./assets/slots.json')
     console.log(err);
   })
 
-function vertexShaderSource() { return `
+function vertexShaderSource() {
+  return `
 attribute vec4 a_position;
 void main() {
   gl_Position = a_position;
 }`}
 
-function fragmentShaderSource() { return `
+function fragmentShaderSource() {
+  return `
 #ifdef GL_ES
 precision highp float;
 #endif
