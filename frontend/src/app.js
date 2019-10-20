@@ -1,8 +1,24 @@
+const starTypes = {
+  "O": 30000,
+  "B": 15000,
+  "A": 8500,
+  "F": 6500,
+  "G": 5500,
+  "K": 4000,
+  "M": 3000,
+}
+
+function spectralTypeToTemp(name) {
+  return starTypes[name[0]]
+}
+
 var vm = new Vue({
   el: '#app',
   data: {
     debug: true,
     exoplanetParams: {
+      mass: 10,
+      temperature: 10,
       star_name: "11 Com",
       star_sp_type: "M9"
     },
@@ -15,11 +31,13 @@ var vm = new Vue({
       vWaterLevel: 0,
       vRivers: 0,
       vTemperature: 0,
+      // regions from poles to mid
       vCold: [0.5, 0.5, 0.5],
       vOcean: [0.5, 0.5, 0.5],
       vTemperate: [0.5, 0.5, 0.5],
       vWarm: [0.5, 0.5, 0.5],
       vHot: [0.5, 0.5, 0.5],
+
       vSpeckle: [0.5, 0.5, 0.5],
       vClouds: [0.9, 0.9, 0.9],
       vCloudiness: 0.35,
@@ -40,8 +58,16 @@ var vm = new Vue({
 
   },
   watch: {
-    exoplanetParams: function () {
-      return this.firstName + ' ' + this.lastName
+    exoplanetParams: {
+      handler: function (val, oldVal) {
+        console.log("hey")
+        this.starParams.temperature = spectralTypeToTemp(val.star_sp_type)
+
+        
+        this.planetParams.vCloudiness = val.mass / 100;
+        this.planetParams.
+      },
+      deep: true
     }
   }
 

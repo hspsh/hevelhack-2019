@@ -526,11 +526,13 @@ Vue.component("planet-render", {
       var offset = 0; // start at the beginning of the buffer
       gl.vertexAttribPointer(
         this.positionAttributeLocation, size, type, normalize, stride, offset)
-    
+
+      planetRadius = 380 / (1 + Math.exp(this.radius/100)) + 190;
+      console.log()
       gl.uniform1i(this.uCities, 0);
       gl.uniform1f(this.uTime, this.$data.t * 0.001); // qqDPS
-      gl.uniform1f(this.uLeft, -10);
-      gl.uniform1f(this.uTop, -10);
+      gl.uniform1f(this.uLeft, - (400 - planetRadius)/2);
+      gl.uniform1f(this.uTop, - (400 - planetRadius)/2);
       gl.uniform2f(this.uResolution, 380, 380);
       gl.uniform1f(this.uAngle, this.planetParams.vAngle);
       gl.uniform1f(this.uRotspeed, this.planetParams.vRotspeed);
