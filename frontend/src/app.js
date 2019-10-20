@@ -16,7 +16,7 @@ var vm = new Vue({
   el: '#app',
   data: {
     debug: true,
-    seed: "eee",
+    seed: "ewwwwee",
     exoplanetParams: {
       mass: 10,
       temperature: 10,
@@ -102,7 +102,7 @@ var vm = new Vue({
         console.log("hey")
         this.starParams.temperature = starTemp
 
-
+1
         this.planetParams.vCloudiness = val.mass / 100;
         this.planetParams.vLightColor = starTemp;
         this.planetParams.radius = val.radius;

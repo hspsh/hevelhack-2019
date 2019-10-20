@@ -9,7 +9,7 @@
   <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" href="style.css">
-
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 </head>
 
@@ -26,13 +26,15 @@
     </div>
   </header>
 
-  <main class="valign-wrapper white-text">
-    <div id="listing">
+  <main class="valign-wrapper white-text ">
+
+    <div id="planet-listing" class="container">
         <h3>Planet listing</h3>
-        <ul id="example-1">
-          <li v-for="item in items">
-            {{ item.message }}
-          </li>
+        <ul id="collection grey darken-3">
+            <planet-list-elt
+            v-for="item in items"
+            v-bind:params="item"
+            ></planet-list-elt>
         </ul>
       <star-render v-bind:star-params="starParams"></star-render>
     </div>
@@ -44,7 +46,7 @@
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="./js/spaceVista.js"></script>
 <script src="./js/starField.js"></script>
-<script src="./js/planet.js"></script>
+<script src="./js/list.js"></script>
 <script src="./app.js"></script>
 
 </html>
