@@ -10,6 +10,10 @@ from sklearn import metrics
 from pathlib import Path
 from flask import request, abort, jsonify
 from flask import Flask
+from flask_cors import CORS
+import json
+
+
 
 def mass_to_luminosity(mass):
   return mass * 3.9e26
@@ -42,6 +46,7 @@ def max_habitable_zone_radius_atm(luminosity, teff):
   return np.sqrt(luminosity / min_heat_flux(teff))
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/ekosfera', methods=['GET'])
 def habitable_zone():
@@ -60,6 +65,17 @@ def habitable_zone():
     }
     return jsonify(res), 200
 
-@app.route('planets', method=['GET'])
-def planets:
-    return 'Hello'
+@app.route('/planets', methods=['GET'])
+def get_planets():
+  with open('../assets/exoplanets_transformed.json') as f:
+    planets = json.load(f)
+    for i, p in enumerate(planets["data"]):
+      p["id"] = i
+  return planets
+
+@app.route('/planets/<int:planet_id>', methods=['GET'])
+def get_planet(planet_id):
+  with open('../assets/exoplanets_transformed.json') as f:
+    planets = json.load(f)
+  return planets['data'][planet_id]
+

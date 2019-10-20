@@ -12,11 +12,13 @@ function spectralTypeToTemp(name) {
   return starTypes[name[0]]
 }
 
+Math.random = Alea(location.search || "GJ 229 A b");
+
 var vm = new Vue({
   el: '#app',
   data: {
     debug: true,
-    seed: "ewwwwee",
+    seed: Math.random() * 9999999999999,
     exoplanetParams: {
       mass: 10,
       temperature: 10,
@@ -24,13 +26,8 @@ var vm = new Vue({
       star_sp_type: "M9"
     },
     starParams: {
-<<<<<<< HEAD
-      seed: 12431231,
-      temperature: [0.2, 0.3, 0.2],
-=======
       seed: Math.random() * 9999999999999,
       temperature: kelvinToRGB(Math.random() * 4000),
->>>>>>> 1fc5019757df2c47c53f66d7521831c7c35bcf18
       size: Math.random()
     },
     planetParams: {
@@ -81,15 +78,15 @@ var vm = new Vue({
       this.planetParams.vWarm = eval(doExpand(result.struct.vals["warmC"], result));
       this.planetParams.vHot = eval(doExpand(result.struct.vals["hotC"], result));
       this.planetParams.vSpeckle = eval(doExpand(result.struct.vals["speckleC"], result));
-      this.planetParams.vLightColor = eval(doExpand(result.struct.vals["lightC"], result));
+      this.planetParams.vLightColor = kelvinToRGB(Math.random() * 4000);
       this.planetParams.vHaze = eval(doExpand(result.struct.vals["hazeC"], result)) || [0.15, 0.15, 0.2];
 
       this.planetParams.vCloudiness = Math.min(1.5, Math.max(0, eval(doExpand(result.struct.vals["clouds"], result))));
       this.planetParams.vClouds = eval(doExpand(result.struct.vals["cloudC"], result)) || [0.9, 0.9, 0.9];
       this.planetParams.vAngle = 0.6 * Math.random();
       this.planetParams.vRotspeed = (0.005 + Math.random() * 0.01) * (Math.random() < 0.3 ? -1 : 1) * eval(doExpand(result.struct.vals["rotspeedMult"], result));;
-      this.planetParams.vLight = 4 * Math.random();
-      this.planetParams.vZLight = 0.2 + Math.random();
+      this.planetParams.vLight = 60;
+      this.planetParams.vZLight = -0.7;
       this.planetParams.vModValue = 17 + Math.ceil(Math.random() * 20);
       this.planetParams.vNoiseOffset = [Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100)];
       this.planetParams.vNoiseScale = [7 + Math.ceil(Math.random() * 10), 5 + Math.ceil(Math.random() * 7)];
@@ -97,17 +94,20 @@ var vm = new Vue({
       this.planetParams.vNoiseScale2 = [sc, sc];
       sc = 20 + Math.ceil(Math.random() * 80);
       this.planetParams.vNoiseScale3 = [sc, sc];
-      this.planetParams.vCloudNoise = [4 + Math.ceil(Math.random() * 9), 20 + Math.ceil(Math.random() * 20)];
+	  this.planetParams.vCloudNoise = [4 + Math.ceil(Math.random() * 9), 20 + Math.ceil(Math.random() * 20)];
+	  
+	  this.starParams.seed = Math.random() * 9999999999999;
+      this.starParams.temperature = kelvinToRGB(Math.random() * 4000);
+      this.starParams.size = Math.random();
     }
   },
   watch: {
-    exoplanetParams: {
+    planetParams: {
       handler: function (val, oldVal) {
-        let starTemp = kelvinToRGB(spectralTypeToTemp(val.star_sp_type));
-        console.log("hey")
+        let starTemp = kelvinToRGB(spectralTypeToTemp(this.exoplanetParams.star_sp_type));
+        // console.log(val)
         this.starParams.temperature = starTemp
 
-1
         this.planetParams.vCloudiness = val.mass / 100;
         this.planetParams.vLightColor = starTemp;
         this.planetParams.radius = val.radius;
@@ -117,8 +117,27 @@ var vm = new Vue({
     seed: this.fromSeedPopulate
   },
   mounted: function () {
-    console.log("generating initial params")
+    //console.log("generating initial params");
     this.fromSeedPopulate(this.seed, null);
+
+    // var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
+    var url = new URL(window.location.href);
+    var planetid = url.searchParams.get("planetid");
+    // console.log(planetid);
+
+    var vn = this
+    fetch('http://localhost:8080/planets/' + planetid)
+        .then(function (response) {
+    
+          return response.json()
+        })
+        .then(function (data) {
+          console.log(data)
+          vn.exoplanetParams = data
+          vn.seed = data["# name"]
+          vn.fromSeedPopulate(vn.seed, null);
+          // console.log(vm.items)
+        })
   },
 
 })

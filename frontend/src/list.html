@@ -19,7 +19,7 @@
       <nav id="nav_f" class="default_color" role="navigation">
         <div class="container">
           <div class="nav-wrapper">
-            <a href="#" id="logo-container" class="brand-logo center">Egzoplanety w Hevelianum</a>
+            <a href="/index.html" id="logo-container" class="brand-logo">Egzoplanety w Hevelianum</a>
           </div>
         </div>
       </nav>
@@ -30,7 +30,8 @@
 
     <div id="planet-listing" class="container">
         <h3>Planet listing</h3>
-        <ul id="collection grey darken-3">
+        
+        <ul class="collection grey darken-3">
             <planet-list-elt
             v-for="item in items"
             v-bind:params="item"
@@ -44,7 +45,6 @@
 <!-- Compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="./js/spaceVista.js"></script>
 <script src="./js/starField.js"></script>
 <script src="./js/list.js"></script>
 <script src="./app.js"></script>

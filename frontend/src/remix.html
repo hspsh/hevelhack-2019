@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" href="style.css">
 
-
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     .planet-view {
       position: fixed;
@@ -26,7 +26,7 @@
       <nav id="nav_f" class="default_color" role="navigation">
         <div class="container">
           <div class="nav-wrapper">
-            <a href="#" id="logo-container" class="brand-logo">Egzoplanety w Hevelianum</a>
+            <a href="/index.html" id="logo-container" class="brand-logo">Egzoplanety w Hevelianum</a>
           </div>
         </div>
       </nav>
@@ -39,120 +39,57 @@
         <div class="card-content white-text">
           <form action="#">
             <p class="range-field">
-              Radius
-              <input type="range" id="test5" min="0" max="100" v-model="exoplanetParams.radius" />
+              Średnica / Masa
+              <input class="tooltipped" type="range" id="test5" min="0" max="100" v-model="planetParams.radius" data-tooltip="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
             </p>
             <p class="range-field">
-              Mass
-              <input type="range" id="eee" min="0" max="100" v-model="exoplanetParams.mass" />
+              Temperatura
+              <input class="tooltipped" type="range" id="www" min="-1" max="1" step="0.01" v-model="planetParams.vTemperature" data-tooltip="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
             </p>
             <p class="range-field">
-              Temperature
-              <input type="range" id="www" min="-100" max="100" v-model="exoplanetParams.temperature" />
+              Woda
+              <input class="tooltipped" type="range" id="www" min="-1" max="1" step="0.01" v-model="planetParams.vWaterLevel" data-tooltip="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
             </p>
-            <div v-if="debug">
-              <h5>Debug</h5>
-              <div class="row">vWaterLevel: <input class="col" type="number" name="vWaterLevel"
-                  v-model="planetParams.vWaterLevel" /></div>
-              <div class="row">vRivers: <input class="col" type="number" name="vRivers" v-model="planetParams.vRivers">
-              </div>
-              <div class="row">vTemperature: <input class="col" type="number" name="vTemperature"
-                  v-model="planetParams.vTemperature"></div>
-
-              <div class="row">vCold:
-                <input class="col" type="number" name="vCold" v-model="planetParams.vCold[0]">
-                <input class="col" type="number" name="vCold" v-model="planetParams.vCold[1]">
-                <input class="col" type="number" name="vCold" v-model="planetParams.vCold[2]">
-              </div>
-              <div class="row">vOcean:
-                <input class="col" type="number" name="vOcean" v-model="planetParams.vOcean[0]">
-                <input class="col" type="number" name="vOcean" v-model="planetParams.vOcean[1]">
-                <input class="col" type="number" name="vOcean" v-model="planetParams.vOcean[2]">
-              </div>
-              <div class="row">vTemperate:
-                <input class="col" type="number" name="vTemperate" v-model="planetParams.vTemperate[0]">
-                <input class="col" type="number" name="vTemperate" v-model="planetParams.vTemperate[1]">
-                <input class="col" type="number" name="vTemperate" v-model="planetParams.vTemperate[2]">
-              </div>
-              <div class="row">vWarm:
-                <input class="col" type="number" name="vWarm" v-model="planetParams.vWarm[0]">
-                <input class="col" type="number" name="vWarm" v-model="planetParams.vWarm[1]">
-                <input class="col" type="number" name="vWarm" v-model="planetParams.vWarm[2]">
-              </div>
-              <div class="row">vHot:
-                <input class="col" type="number" name="vHot" v-model="planetParams.vHot[0]">
-                <input class="col" type="number" name="vHot" v-model="planetParams.vHot[1]">
-                <input class="col" type="number" name="vHot" v-model="planetParams.vHot[2]">
-              </div>
-              <div class="row">vSpeckle:
-                <input class="col" type="number" name="vSpeckle" v-model="planetParams.vSpeckle[0]">
-                <input class="col" type="number" name="vSpeckle" v-model="planetParams.vSpeckle[1]">
-                <input class="col" type="number" name="vSpeckle" v-model="planetParams.vSpeckle[2]">
-              </div>
-              <div class="row">vClouds:
-                <input class="col" type="number" name="vClouds" v-model="planetParams.vClouds[0]">
-                <input class="col" type="number" name="vClouds" v-model="planetParams.vClouds[1]">
-                <input class="col" type="number" name="vClouds" v-model="planetParams.vClouds[2]">
-              </div>
-              <div class="row">vCloudiness:
-                <input class="col" type="number" name="vCloudiness" v-model="planetParams.vCloudiness">
-              </div>
-              <div class="row">vLightColor:
-                <input class="col" type="number" name="vLightColor" v-model="planetParams.vLightColor[0]">
-                <input class="col" type="number" name="vLightColor" v-model="planetParams.vLightColor[1]">
-                <input class="col" type="number" name="vLightColor" v-model="planetParams.vLightColor[2]">
-              </div>
-              <div class="row">vHaze:
-                <input class="col" type="number" name="vHaze" v-model="planetParams.vHaze[0]">
-                <input class="col" type="number" name="vHaze" v-model="planetParams.vHaze[1]">
-                <input class="col" type="number" name="vHaze" v-model="planetParams.vHaze[2]">
-              </div>
-
-              <div class="row">vAngle: <input class="col" type="number" name="vAngle" v-model="planetParams.vAngle">
-              </div>
-              <div class="row">vRotspeed: <input class="col" type="number" name="vRotspeed"
-                  v-model="planetParams.vRotspeed"></div>
-              <div class="row">vLight: <input class="col" type="number" name="vLight" v-model="planetParams.vLight">
-              </div>
-              <div class="row">vZLight: <input class="col" type="number" name="vZLight" v-model="planetParams.vZLight">
-              </div>
-              <div class="row">vModValue: <input class="col" type="number" name="vModValue"
-                  v-model="planetParams.vModValue"></div>
-              <div class="row">vNoiseOffset:
-                <input class="col" type="number" name="vNoiseOffset" v-model="planetParams.vNoiseOffset[0]">
-                <input class="col" type="number" name="vNoiseOffset" v-model="planetParams.vNoiseOffset[1]">
-              </div>
-              <div class="input-field inline">vNoiseScale:
-                <input class="col" type="number" name="vNoiseScale" v-model="planetParams.vNoiseScale[0]">
-                <input class="col" type="number" name="vNoiseScale" v-model="planetParams.vNoiseScale[1]">
-              </div>
-              <div class="input-field inline">vNoiseScale2:
-                <input class="col" type="number" name="vNoiseScale2" v-model="planetParams.vNoiseScale2[0]">
-                <input class="col" type="number" name="vNoiseScale2" v-model="planetParams.vNoiseScale2[1]">
-              </div>
-              <div class="input-field inline">vNoiseScale3:
-                <input class="col" type="number" name="vNoiseScale3" v-model="planetParams.vNoiseScale3[0]">
-                <input class="col" type="number" name="vNoiseScale3" v-model="planetParams.vNoiseScale3[1]">
-              </div>
-              <div class="input-field inline">vCloudNoise:
-                <input class="col" type="number" name="vCloudNoise" v-model="planetParams.vCloudNoise[0]">
-                <input class="col" type="number" name="vCloudNoise" v-model="planetParams.vCloudNoise[1]">
-              </div>
-
-            </div>
+            <p class="range-field">
+              Rzeki
+              <input class="tooltipped" type="range" id="www" min="-10" max="10" v-model="planetParams.vRivers" data-tooltip="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
+            </p>
+            <p class="range-field">
+              Chmury
+              <input class="tooltipped" type="range" id="www" min="0" max="1" step="0.01" v-model="planetParams.vCloudiness" data-tooltip="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
+            </p>
+            <p class="range-field">
+              Prędkość Obrotu
+              <input class="tooltipped" type="range" id="www" min="0" max="0.2" step="0.001" v-model="planetParams.vRotspeed" data-tooltip="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
+            </p>
           </form>
+          
         </div>
       </div>
 
       <planet-render v-bind:planet-params="planetParams" id="detailPlanet"></planet-render>
       <star-render v-bind:star-params="starParams"></star-render>
+
+
+<div class="fixed-action-btn">
+  <a class="btn-floating btn-large red">
+    <i class="large material-icons">share</i>
+  </a>
+  <!-- <ul>
+    <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
+    <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+    <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+    <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+  </ul> -->
+</div>
+      
     </div>
     <div id="view">
       <!-- <canvas id="planet-view"></canvas> -->
     </div>
     <star-render v-bind:star-params="starParams"></star-render>
   </main>
-  
+
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://code.jquery.com/jquery-2.2.4.min.js"
     integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
@@ -162,7 +99,11 @@
   <script src="./js/starField.js"></script>
   <script src="./js/planet.js"></script>
   <script src="./app.js"></script>
-
+  <script>
+      $(document).ready(function(){
+    $('.tooltipped').tooltip();
+  });
+  </script>
 </body>
 
 </html>

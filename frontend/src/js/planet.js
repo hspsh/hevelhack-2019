@@ -4785,13 +4785,10 @@ function doParse(text) {
       value[k] = v;
     }
   });
-  console.log(structs);
-  console.log(slots);
 }
 
 function doGen(structID) {
   // we always gen planaet
-  console.log(structID);
 
   var result = {
     "struct": structs[structID]
