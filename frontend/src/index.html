@@ -19,7 +19,7 @@
       <nav id="nav_f" class="default_color" role="navigation">
         <div class="container">
           <div class="nav-wrapper">
-            <a href="#" id="logo-container" class="brand-logo center">Egzoplanety w Hevelianum</a>
+            <a href="#" id="logo-container" class="brand-logo">Egzoplanety w Hevelianum</a>
           </div>
         </div>
       </nav>
@@ -29,14 +29,20 @@
   <main class="valign-wrapper white-text">
     <div id="app">
       <star-render v-bind:star-params="starParams"></star-render>
-    </div>
-    <div id="landing">
-      <h5 class="center-align">Czym są Egzoplanety?</h5>
-      <p>Egzoplaneta to inaczej planeta pozasłoneczna, czyli każda planeta okrążająca inną gwiazdę na niebie. Do nie
-        dawna myślano że nasz Układ Słoneczny jest wyjątkowy w posiadaniu planet. Jednak ostatnie badania nieba
-        zasugerowały że takich planet jak ziemia może istnieć wiele więcej... </p>
-      <a class="waves-effect waves-light btn" href="remix.html">Buduj</a>
-      <a class="waves-effect waves-light btn" href="detail.html">Szukaj</a>
+      
+      
+      <div id="landing">
+          <center>
+          <h2 id="header" class="center-align">Czym są Egzoplanety?</h2></br>
+          <div id="landingPlanet"><planet-render v-bind:planet-params="planetParams"></planet-render></div>
+        <p>Egzoplaneta to inaczej planeta pozasłoneczna, czyli każda planeta okrążająca inną gwiazdę na niebie. Do nie
+          dawna myślano że nasz Układ Słoneczny jest wyjątkowy w posiadaniu planet. Jednak ostatnie badania nieba
+          zasugerowały że takich planet jak ziemia może istnieć wiele więcej... </p>
+          <a class="waves-effect waves-light btn" href="remix.html">Buduj</a>
+          <a class="waves-effect waves-light btn" href="detail.html">Szukaj</a>
+        </center>
+      </div>
+
     </div>
   </main>
 </body>

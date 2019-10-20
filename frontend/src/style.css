@@ -13,11 +13,31 @@ main {
     height: 100%;
 }
 
+#header {
+    margin: auto;
+}
+
 #landing {
-    margin-top: 60vh;
+    position: absolute;
+    bottom: 3ch;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: transparent;
     margin: auto;
     max-width: 68ch;
+}
+
+#landingPlanet {
+    position: relative;
+    display: inline-block;
+    width: 400px;
+    height: 400px;
+}
+
+#landingPlanet canvas {
+    width: 400px;
+    height: 400px;
 }
 
 #details {
@@ -31,9 +51,11 @@ main {
     opacity: 0.7;
 }
 
-.planet-view {
+#detailPlanet {
+    width: 400px;
+    height: 400px;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translate(-50%, -50%);
 }
 
 .star-view {
