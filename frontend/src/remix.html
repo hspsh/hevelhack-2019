@@ -26,7 +26,7 @@
       <nav id="nav_f" class="default_color" role="navigation">
         <div class="container">
           <div class="nav-wrapper">
-            <a href="#" id="logo-container" class="brand-logo center">Egzoplanety w Hevelianum</a>
+            <a href="#" id="logo-container" class="brand-logo">Egzoplanety w Hevelianum</a>
           </div>
         </div>
       </nav>
@@ -144,7 +144,7 @@
         </div>
       </div>
 
-      <planet-render v-bind:planet-params="planetParams"></planet-render>
+      <planet-render v-bind:planet-params="planetParams" id="detailPlanet"></planet-render>
       <star-render v-bind:star-params="starParams"></star-render>
     </div>
     <div id="view">
