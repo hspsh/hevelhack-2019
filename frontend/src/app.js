@@ -49,7 +49,6 @@ var vm = new Vue({
 
 })
 
-
 function kelvinToRGB(kelvin) {
     var temp = kelvin / 100;
     var red, green, blue;
@@ -73,8 +72,6 @@ function kelvinToRGB(kelvin) {
     return [clamp(red, 0, 255)/255, clamp(green, 0, 255)/255, clamp(blue, 0, 255)/255]
     
 }
-
-
 
 function clamp(x, min, max) {
     if (x < min) {

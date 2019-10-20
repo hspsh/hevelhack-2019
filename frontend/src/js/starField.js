@@ -1,3 +1,6 @@
+
+"use strict";
+
 Vue.component("star-render", {
     props: ['starParams'],
 
@@ -24,8 +27,6 @@ Vue.component("star-render", {
     },
     template: '<canvas ref="canvas" class="star-view"></canvas>',
 })
-
-"use strict";
 
 ////////////////////////////////////////////////////////////////////
 // Utility functions                                              //
