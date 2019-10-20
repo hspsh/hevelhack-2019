@@ -8,12 +8,6 @@
   <title>Hevelianum</title>
   <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-  <!-- Compiled and minified JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script src="./app.js"></script>
-  <script src="./js/spaceVista.js"></script>
-  <script src="./js/starField.js"></script>
   <link rel="stylesheet" href="style.css">
 
 
@@ -33,12 +27,26 @@
   </header>
 
   <main class="valign-wrapper white-text">
+    <div id="app">
+      <star-render v-bind:star-params="starParams"></star-render>
+    </div>
     <div id="landing">
       <h5 class="center-align">Czym są Egzoplanety?</h5>
-      <p>Egzoplaneta to inaczej planeta pozasłoneczna, czyli każda planeta okrążająca inną gwiazdę na niebie. Do nie dawna myślano że nasz Układ Słoneczny jest wyjątkowy w posiadaniu planet. Jednak ostatnie badania nieba zasugerowały że takich planet jak ziemia może istnieć wiele więcej... </p>
-      <a class="waves-effect waves-light btn">Buduj</a><a class="waves-effect waves-light btn">Szukaj</a>
+      <p>Egzoplaneta to inaczej planeta pozasłoneczna, czyli każda planeta okrążająca inną gwiazdę na niebie. Do nie
+        dawna myślano że nasz Układ Słoneczny jest wyjątkowy w posiadaniu planet. Jednak ostatnie badania nieba
+        zasugerowały że takich planet jak ziemia może istnieć wiele więcej... </p>
+      <a class="waves-effect waves-light btn" href="remix.html">Buduj</a>
+      <a class="waves-effect waves-light btn" href="detail.html">Szukaj</a>
     </div>
   </main>
 </body>
+
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="./js/spaceVista.js"></script>
+<script src="./js/starField.js"></script>
+<script src="./js/planet.js"></script>
+<script src="./app.js"></script>
 
 </html>

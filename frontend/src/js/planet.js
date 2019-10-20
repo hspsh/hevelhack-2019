@@ -1,7 +1,7 @@
 const vertexShaderSource = document.getElementById("2d-vertex-shader").text;
 const fragmentShaderSource = document.getElementById("planet-shader").text;
 
-var canvas = document.getElementById("planet-view");
+// var canvas = document.getElementById("planet-view");
 var structs = {};
 var slots = {};
 
@@ -46,149 +46,6 @@ function resize(canvas) {
   }
 }
 
-var gl = canvas.getContext("webgl");
-// var vertexShaderSource = document.getElementById("2d-vertex-shader").text;
-// var fragmentShaderSource = document.getElementById("planet-shader").text;
-var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
-var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
-var program = createProgram(gl, vertexShader, fragmentShader);
-var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
-
-// Uniform variables, locations to vars in shader program
-// so we can change them
-
-var uCities = gl.getUniformLocation(program, "cities");
-var uTime = gl.getUniformLocation(program, "time");
-var uLeft = gl.getUniformLocation(program, "left");
-var uTop = gl.getUniformLocation(program, "top");
-var uResolution = gl.getUniformLocation(program, "resolution");
-var uAngle = gl.getUniformLocation(program, "angle");
-var uRotspeed = gl.getUniformLocation(program, "rotspeed");
-var uLight = gl.getUniformLocation(program, "light");
-var uZLight = gl.getUniformLocation(program, "zLight");
-var uLightColor = gl.getUniformLocation(program, "lightColor");
-var uModValue = gl.getUniformLocation(program, "modValue");
-var uNoiseOffset = gl.getUniformLocation(program, "noiseOffset");
-var uNoiseScale = gl.getUniformLocation(program, "noiseScale");
-var uNoiseScale2 = gl.getUniformLocation(program, "noiseScale2");
-var uNoiseScale3 = gl.getUniformLocation(program, "noiseScale3");
-var uCloudNoise = gl.getUniformLocation(program, "cloudNoise");
-var uCloudiness = gl.getUniformLocation(program, "cloudiness");
-var uOcean = gl.getUniformLocation(program, "ocean");
-var uIce = gl.getUniformLocation(program, "ice");
-var uCold = gl.getUniformLocation(program, "cold");
-var uTemperate = gl.getUniformLocation(program, "temperate");
-var uWarm = gl.getUniformLocation(program, "warm");
-var uHot = gl.getUniformLocation(program, "hot");
-var uSpeckle = gl.getUniformLocation(program, "speckle");
-var uClouds = gl.getUniformLocation(program, "clouds");
-var uWaterLevel = gl.getUniformLocation(program, "waterLevel");
-var uRivers = gl.getUniformLocation(program, "rivers");
-var uTemperature = gl.getUniformLocation(program, "temperature");
-var uHaze = gl.getUniformLocation(program, "haze");
-
-var positionBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-// three 2d points
-var positions = [
-  -1, -1,
-  -1, 1,
-  1, 1,
-  -1, -1,
-  1, 1,
-  1, -1
-];
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-// wtf are you, default values???
-// prob global vars used in animation loop
-
-var data = {
-  vWaterLevel: 0,
-  vRivers: 0,
-  vTemperature: 0,
-  vCold: [0.5, 0.5, 0.5],
-  vOcean: [0.5, 0.5, 0.5],
-  vTemperate: [0.5, 0.5, 0.5],
-  vWarm: [0.5, 0.5, 0.5],
-  vHot: [0.5, 0.5, 0.5],
-  vSpeckle: [0.5, 0.5, 0.5],
-  vClouds: [0.9, 0.9, 0.9],
-  vCloudiness: 0.35,
-  vLightColor: [1.0, 1.0, 1.0],
-  vHaze: [0.15, 0.15, 0.2],
-
-  vAngle: 0.3,
-  vRotspeed: 0.01,
-  vLight: 1.9,
-  vZLight: 0.5,
-  vModValue: 29,
-  vNoiseOffset: [0, 0],
-  vNoiseScale: [11, 8],
-  vNoiseScale2: [200, 200],
-  vNoiseScale3: [50, 50],
-  vCloudNoise: [6, 30],
-}
-
-function renderPlanet() {
-  resize(gl.canvas);
-  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
-  // Clear the canvas
-  gl.clearColor(0, 0, 0, 0);
-  gl.clear(gl.COLOR_BUFFER_BIT);
-  // Tell it to use our program (pair of shaders)
-  gl.useProgram(program);
-  gl.enableVertexAttribArray(positionAttributeLocation);
-  // Bind the position buffer.
-  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
-  // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-  var size = 2; // 2 components per iteration
-  var type = gl.FLOAT; // the data is 32bit floats
-  var normalize = false; // don't normalize the data
-  var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
-  var offset = 0; // start at the beginning of the buffer
-  gl.vertexAttribPointer(
-    positionAttributeLocation, size, type, normalize, stride, offset)
-
-  gl.uniform1i(uCities, 0);
-  gl.uniform1f(uTime, t * 0.001); // qqDPS
-  gl.uniform1f(uLeft, -10);
-  gl.uniform1f(uTop, -10);
-  gl.uniform2f(uResolution, 380, 380);
-  gl.uniform1f(uAngle, data.vAngle);
-  gl.uniform1f(uRotspeed, data.vRotspeed);
-  gl.uniform1f(uLight, data.vLight);
-  gl.uniform1f(uZLight, data.vZLight);
-  gl.uniform3fv(uLightColor, data.vLightColor);
-  gl.uniform1f(uModValue, data.vModValue);
-  gl.uniform2fv(uNoiseOffset, data.vNoiseOffset);
-  gl.uniform2fv(uNoiseScale, data.vNoiseScale);
-  gl.uniform2fv(uNoiseScale2, data.vNoiseScale2);
-  gl.uniform2fv(uNoiseScale3, data.vNoiseScale3);
-  gl.uniform2fv(uCloudNoise, data.vCloudNoise);
-  gl.uniform1f(uCloudiness, data.vCloudiness);
-  gl.uniform3fv(uOcean, data.vOcean);
-  gl.uniform3f(uIce, 250 / 255.0, 250 / 255.0, 250 / 255.0);
-  gl.uniform3fv(uCold, data.vCold); //53/255.0, 102/255.0, 100/255.0);
-  gl.uniform3fv(uTemperate, data.vTemperate); //79/255.0, 109/255.0, 68/255.0);
-  gl.uniform3fv(uWarm, data.vWarm); //119/255.0, 141/255.0, 82/255.0);
-  gl.uniform3fv(uHot, data.vHot); //223/255.0, 193/255.0, 148/255.0);
-  gl.uniform3fv(uSpeckle, data.vSpeckle);
-  gl.uniform3fv(uClouds, data.vClouds);
-  gl.uniform3fv(uHaze, data.vHaze);
-  gl.uniform1f(uWaterLevel, data.vWaterLevel);
-  gl.uniform1f(uRivers, data.vRivers);
-  gl.uniform1f(uTemperature, data.vTemperature);
-
-  var primitiveType = gl.TRIANGLES;
-  var offset = 0;
-  var count = 6;
-  gl.drawArrays(primitiveType, offset, count);
-}
-
-renderPlanet();
 
 var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 var t = new Date().getTime() % 1000000;
@@ -376,69 +233,17 @@ fetch('./assets/slots.json')
     console.log(err);
   })
 
-// $('#temp-slider').change(function() {
-//   console.log(this.value);
-//   vTemperature = this.value;
-//   if($(this).closest('form').data('changed')) {
-//     console.log(this);
-//   }
-// });
-
-// $('#temp-slider').change(function() {
-//   console.log(this.value);
-//   vTemperature = this.value;
-//   if($(this).closest('form').data('changed')) {
-//     console.log(this);
-//   }
-// });
 
 
 Vue.component("planet-render", {
   props: ['planetParams'],
 
   data: function () {
-    // var canvas = this.$refs.canvas;
-    // console.log(this.$refs)
-    // var gl = canvas.getContext("webgl");
-    // var vertexShaderSource = document.getElementById("2d-vertex-shader").text;
-    // var fragmentShaderSource = document.getElementById("planet-shader").text;
-    // var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
-    // var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
-    // var program = createProgram(gl, vertexShader, fragmentShader);
-    // var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
-
-    // Uniform variables, locations to vars in shader program
-    // so we can change them
 
     return {
       t: new Date().getTime() % 1000000,
 
       // planetParams: this.planetParams,
-
-      // vWaterLevel: 0,
-      // vRivers: 0,
-      // vTemperature: 0,
-      // vCold: [0.5, 0.5, 0.5],
-      // vOcean: [0.5, 0.5, 0.5],
-      // vTemperate: [0.5, 0.5, 0.5],
-      // vWarm: [0.5, 0.5, 0.5],
-      // vHot: [0.5, 0.5, 0.5],
-      // vSpeckle: [0.5, 0.5, 0.5],
-      // vClouds: [0.9, 0.9, 0.9],
-      // vCloudiness: 0.35,
-      // vLightColor: [1.0, 1.0, 1.0],
-      // vHaze: [0.15, 0.15, 0.2],
-
-      // vAngle: 0.3,
-      // vRotspeed: 0.01,
-      // vLight: 1.9,
-      // vZLight: 0.5,
-      // vModValue: 29,
-      // vNoiseOffset: [0, 0],
-      // vNoiseScale: [11, 8],
-      // vNoiseScale2: [200, 200],
-      // vNoiseScale3: [50, 50],
-      // vCloudNoise: [6, 30],
     }
   },
   methods: {
@@ -497,7 +302,7 @@ Vue.component("planet-render", {
         1, 1,
         1, -1
       ];
-      this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(positions), this.gl.STATIC_DRAW);
+      this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.positions), this.gl.STATIC_DRAW);
     },
 
     renderPlanet() {
@@ -506,7 +311,7 @@ Vue.component("planet-render", {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     
       // Clear the canvas
-      gl.clearColor(0, 0, 0, 0);
+      gl.clearColor(0, 0, 0, 1);
       gl.clear(gl.COLOR_BUFFER_BIT);
       // Tell it to use our program (pair of shaders)
       gl.useProgram(this.program);
@@ -580,37 +385,8 @@ Vue.component("planet-render", {
   template: '<canvas ref="canvas" class="planet-view"></canvas>',
 })
 
-var vm = new Vue({
-  el: '#app',
-  data: {
-    planetParams: {
-      vWaterLevel: 0,
-      vRivers: 0,
-      vTemperature: 0,
-      vCold: [0.5, 0.5, 0.5],
-      vOcean: [0.5, 0.5, 0.5],
-      vTemperate: [0.5, 0.5, 0.5],
-      vWarm: [0.5, 0.5, 0.5],
-      vHot: [0.5, 0.5, 0.5],
-      vSpeckle: [0.5, 0.5, 0.5],
-      vClouds: [0.9, 0.9, 0.9],
-      vCloudiness: 0.35,
-      vLightColor: [1.0, 1.0, 1.0],
-      vHaze: [0.15, 0.15, 0.2],
 
-      vAngle: 0.3,
-      vRotspeed: 0.01,
-      vLight: 1.9,
-      vZLight: 0.5,
-      vModValue: 29,
-      vNoiseOffset: [0, 0],
-      vNoiseScale: [11, 8],
-      vNoiseScale2: [200, 200],
-      vNoiseScale3: [50, 50],
-      vCloudNoise: [6, 30],
-    }
-  }
-})
+
 
 // jQuery.ajax({
 //     url: "data.txt?" + (new Date()).getTime(),

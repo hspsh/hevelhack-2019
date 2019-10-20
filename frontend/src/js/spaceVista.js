@@ -11,16 +11,6 @@ var rgba = function (r, g, b, a) {
     return "rgba(" + r + "," + g + "," + b + "," + a + ")";
 }
 
-var rgbaCanvas = function (width, height, r, g, b, a) {
-    var canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    var context = canvas.getContext("2d");
-    context.fillStyle = rgba(r, g, b, a);
-    context.fillRect(0, 0, width, height);
-    return canvas;
-}
-
 ////////////////////////////////////////////////////////////////////
 // Iterator & Renderers                                           //
 ////////////////////////////////////////////////////////////////////
@@ -115,7 +105,7 @@ SunRenderer.prototype.next = function () {
     var r = this.idata[offset + 0] / 255 + Math.min(1, this.r + q * 2) * i;
     var g = this.idata[offset + 1] / 255 + Math.min(1, this.g + q * 4) * i;
     var b = this.idata[offset + 2] / 255 + Math.min(1, this.b + q * 2) * i;
-    this.context.fillStyle = rgba(r, g, b, 1);
+    this.context.fillStyle = rgba(r, g, b, i);
     this.context.fillRect(next.x, next.y, 1, 1);
     return next.done;
 }
@@ -159,50 +149,32 @@ NebulaRenderer.prototype.next = function () {
 // SpaceVista                                                     //
 ////////////////////////////////////////////////////////////////////
 
-var SpaceVista = function (seed, width, height, renderSun) {
+var SpaceVista = function (seed, canvas, width, height, renderSun) {
     this.width = width;
     this.height = height;
     this.seed = seed;
     this.renderSun = renderSun;
     this.scale = Math.max(width, height);
-    this.initializeSurfaces();
+    canvas.width = width;
+    canvas.height = height;
+    this.canvas = canvas;
+    this.ctx = canvas.getContext("2d");
     Math.random = Alea(this.seed);
     this.renderField();
     this.buildQueue();
-}
-
-SpaceVista.prototype.initializeSurfaces = function () {
-    this.canvas = rgbaCanvas(this.width, this.height, 0, 0, 0, 1);
-    this.ctx = this.canvas.getContext("2d");
 }
 
 SpaceVista.prototype.buildQueue = function () {
     this.queueIndex = 0;
     this.queue = [];
     this.op = undefined;
-    Math.random = Alea(this.seed);
-    var r, g, b;
-    if (Math.random() < 0.5) {
-        r = 1;
-        g = Math.random();
-        b = Math.random() * 0.25;
-    } else {
-        r = Math.random() * 0.25;
-        g = Math.random();
-        b = 1;
-    }
     
-    this.queue.push({
-        type: "sun",
-        op: new SunRenderer(this.canvas, this.renderSun.color.r, this.renderSun.color.g, this.renderSun.color.b, this.width / 2, this.height / 2, this.scale * (this.renderSun.size * 0.1))
-    });
-    /*
     Math.random = Alea(this.seed);
     this.queue.push({
         type: "nebula",
         op: new NebulaRenderer(this.canvas, Math.random(), Math.random(), Math.random(), this.scale / 4, Math.random() * 0.2 + 1, Math.random() * 3 + 3)
     });
-    */
+    
     Math.random = Alea(this.seed);
     while (Math.random() < 0.95) {
         this.queue.push({
@@ -211,7 +183,11 @@ SpaceVista.prototype.buildQueue = function () {
         });
     }
 
-    
+    Math.random = Alea(this.seed);
+    this.queue.push({
+        type: "sun",
+        op: new SunRenderer(this.canvas, this.renderSun.color.r, this.renderSun.color.g, this.renderSun.color.b, this.width / 2, this.height / 2, this.scale * (this.renderSun.size * 0.1))
+    });
 
 }
 

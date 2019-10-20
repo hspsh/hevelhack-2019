@@ -1,31 +1,30 @@
-document.addEventListener('DOMContentLoaded', () => {
-    init();
-    update();
-});
+Vue.component("star-render", {
+    props: ['starParams'],
 
-document.addEventListener('hashchange', () => {
-    init();
-    update();
-});
+    data: function () {
+        return {
+            t: new Date().getTime() % 1000000,
+        }
+    },
+    methods: {
+        update() {
+            var result = this.vista.update();
+            if (result.op != "done") {
+                requestAnimationFrame(this.update);
+            }
+        }
 
-function init() {
-    let settings = window.settings;
-    container = document.createElement("div");
-    container.id = "starField";
-    document.getElementsByTagName("main")[0].appendChild(container);
-    vista = new SpaceVista(settings.seed, window.innerWidth / 2, window.innerHeight / 2, {
-        color: kelvinToRGB(settings.parameters.temperature),
-        size: settings.parameters.size
-    });
-    container.appendChild(vista.canvas);
-}
+    },
+    mounted: function () {
+        this.vista = new SpaceVista(this.starParams.seed, this.$refs.canvas, window.innerWidth / 3, window.innerHeight /3, {
+            color: kelvinToRGB(this.starParams.temperature),
+            size: this.starParams.size
+        });
+        this.update();
+    },
+    template: '<canvas ref="canvas" class="star-view"></canvas>',
+})
 
-function update() {
-    var result = vista.update();
-    if (result.op != "done") {
-        requestAnimationFrame(update);
-    }
-}
 
 function kelvinToRGB(kelvin) {
     var temp = kelvin / 100;
@@ -56,8 +55,13 @@ function kelvinToRGB(kelvin) {
 
 
 
-function clamp( x, min, max ) {
-    if(x<min){ return min; }
-    if(x>max){ return max; }
+function clamp(x, min, max) {
+    if (x < min) {
+        return min;
+    }
+    if (x > max) {
+        return max;
+    }
     return x;
 }
+

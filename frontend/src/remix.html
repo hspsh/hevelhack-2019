@@ -6,14 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#FFF">
   <title>Hevelianum</title>
-  <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-  <!-- Compiled and minified JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script src="./app.js"></script>
-  <script src="./js/spaceVista.js"></script>
-  <script src="./js/starField.js"></script>
   <link rel="stylesheet" href="style.css">
 
 
@@ -33,7 +26,7 @@
       <nav id="nav_f" class="default_color" role="navigation">
         <div class="container">
           <div class="nav-wrapper">
-            <a href="#" id="logo-container" class="brand-logo center">Hevelianum</a>
+            <a href="#" id="logo-container" class="brand-logo center">Egzoplanety w Hevelianum</a>
           </div>
         </div>
       </nav>
@@ -42,32 +35,122 @@
 
   <main>
     <div id="app">
-      <div id="details">
+      <div id="details" class="card blue-grey darken-1">
+        <div class="card-content white-text">
           <form action="#">
             <p class="range-field">
-              <input type="range" id="test5" min="0" max="100" v-model="planetParams.vTemperature"/>
+              vTemperature
+              <input type="range" id="test5" min="0" max="100" v-model="planetParams.vTemperature" />
             </p>
             <p class="range-field">
-                <input type="range" id="eee" min="0" max="100" v-model="planetParams.vWaterLevel"/>
+              vWaterLevel
+              <input type="range" id="eee" min="0" max="100" v-model="planetParams.vWaterLevel" />
             </p>
             <p class="range-field">
-                <input type="range" id="www" min="0" max="100" v-model="planetParams.vRivers"/>
+              vRivers
+              <input type="range" id="www" min="0" max="100" v-model="planetParams.vRivers" />
             </p>
-            <p class="range-field">
-                <input type="range" id="www" min="0" max="100" v-model="planetParams.vLight"/>
-            </p>
-            <p class="range-field">
-                <input type="range" id="www" min="0" max="100" v-model="planetParams.vZLight"/>
-            </p>
+            <div v-if="debug">
+              <h5>Debug</h5>
+              <div class="row">vWaterLevel: <input class="col" type="number" name="vWaterLevel"
+                  v-model="planetParams.vWaterLevel" /></div>
+              <div class="row">vRivers: <input class="col" type="number" name="vRivers" v-model="planetParams.vRivers">
+              </div>
+              <div class="row">vTemperature: <input class="col" type="number" name="vTemperature"
+                  v-model="planetParams.vTemperature"></div>
+
+              <div class="row">vCold:
+                <input class="col" type="number" name="vCold" v-model="planetParams.vCold[0]">
+                <input class="col" type="number" name="vCold" v-model="planetParams.vCold[1]">
+                <input class="col" type="number" name="vCold" v-model="planetParams.vCold[2]">
+              </div>
+              <div class="row">vOcean:
+                <input class="col" type="number" name="vOcean" v-model="planetParams.vOcean[0]">
+                <input class="col" type="number" name="vOcean" v-model="planetParams.vOcean[1]">
+                <input class="col" type="number" name="vOcean" v-model="planetParams.vOcean[2]">
+              </div>
+              <div class="row">vTemperate:
+                <input class="col" type="number" name="vTemperate" v-model="planetParams.vTemperate[0]">
+                <input class="col" type="number" name="vTemperate" v-model="planetParams.vTemperate[1]">
+                <input class="col" type="number" name="vTemperate" v-model="planetParams.vTemperate[2]">
+              </div>
+              <div class="row">vWarm:
+                <input class="col" type="number" name="vWarm" v-model="planetParams.vWarm[0]">
+                <input class="col" type="number" name="vWarm" v-model="planetParams.vWarm[1]">
+                <input class="col" type="number" name="vWarm" v-model="planetParams.vWarm[2]">
+              </div>
+              <div class="row">vHot:
+                <input class="col" type="number" name="vHot" v-model="planetParams.vHot[0]">
+                <input class="col" type="number" name="vHot" v-model="planetParams.vHot[1]">
+                <input class="col" type="number" name="vHot" v-model="planetParams.vHot[2]">
+              </div>
+              <div class="row">vSpeckle:
+                <input class="col" type="number" name="vSpeckle" v-model="planetParams.vSpeckle[0]">
+                <input class="col" type="number" name="vSpeckle" v-model="planetParams.vSpeckle[1]">
+                <input class="col" type="number" name="vSpeckle" v-model="planetParams.vSpeckle[2]">
+              </div>
+              <div class="row">vClouds:
+                <input class="col" type="number" name="vClouds" v-model="planetParams.vClouds[0]">
+                <input class="col" type="number" name="vClouds" v-model="planetParams.vClouds[1]">
+                <input class="col" type="number" name="vClouds" v-model="planetParams.vClouds[2]">
+              </div>
+              <div class="row">vCloudiness:
+                <input class="col" type="number" name="vCloudiness" v-model="planetParams.vCloudiness">
+              </div>
+              <div class="row">vLightColor:
+                <input class="col" type="number" name="vLightColor" v-model="planetParams.vLightColor[0]">
+                <input class="col" type="number" name="vLightColor" v-model="planetParams.vLightColor[1]">
+                <input class="col" type="number" name="vLightColor" v-model="planetParams.vLightColor[2]">
+              </div>
+              <div class="row">vHaze:
+                <input class="col" type="number" name="vHaze" v-model="planetParams.vHaze[0]">
+                <input class="col" type="number" name="vHaze" v-model="planetParams.vHaze[1]">
+                <input class="col" type="number" name="vHaze" v-model="planetParams.vHaze[2]">
+              </div>
+
+              <div class="row">vAngle: <input class="col" type="number" name="vAngle" v-model="planetParams.vAngle">
+              </div>
+              <div class="row">vRotspeed: <input class="col" type="number" name="vRotspeed"
+                  v-model="planetParams.vRotspeed"></div>
+              <div class="row">vLight: <input class="col" type="number" name="vLight" v-model="planetParams.vLight">
+              </div>
+              <div class="row">vZLight: <input class="col" type="number" name="vZLight" v-model="planetParams.vZLight">
+              </div>
+              <div class="row">vModValue: <input class="col" type="number" name="vModValue"
+                  v-model="planetParams.vModValue"></div>
+              <div class="row">vNoiseOffset:
+                <input class="col" type="number" name="vNoiseOffset" v-model="planetParams.vNoiseOffset[0]">
+                <input class="col" type="number" name="vNoiseOffset" v-model="planetParams.vNoiseOffset[1]">
+              </div>
+              <div class="input-field inline">vNoiseScale:
+                <input class="col" type="number" name="vNoiseScale" v-model="planetParams.vNoiseScale[0]">
+                <input class="col" type="number" name="vNoiseScale" v-model="planetParams.vNoiseScale[1]">
+              </div>
+              <div class="input-field inline">vNoiseScale2:
+                <input class="col" type="number" name="vNoiseScale2" v-model="planetParams.vNoiseScale2[0]">
+                <input class="col" type="number" name="vNoiseScale2" v-model="planetParams.vNoiseScale2[1]">
+              </div>
+              <div class="input-field inline">vNoiseScale3:
+                <input class="col" type="number" name="vNoiseScale3" v-model="planetParams.vNoiseScale3[0]">
+                <input class="col" type="number" name="vNoiseScale3" v-model="planetParams.vNoiseScale3[1]">
+              </div>
+              <div class="input-field inline">vCloudNoise:
+                <input class="col" type="number" name="vCloudNoise" v-model="planetParams.vCloudNoise[0]">
+                <input class="col" type="number" name="vCloudNoise" v-model="planetParams.vCloudNoise[1]">
+              </div>
+
+            </div>
           </form>
+        </div>
       </div>
+
       <planet-render v-bind:planet-params="planetParams"></planet-render>
+      <star-render v-bind:star-params="starParams"></star-render>
     </div>
     <div id="view">
-      <canvas id="planet-view"></canvas>
+      <!-- <canvas id="planet-view"></canvas> -->
     </div>
-
-    <!-- <canvas id="space-view"></canvas> -->
+    <star-render v-bind:star-params="starParams"></star-render>
   </main>
   <script id="2d-vertex-shader" type="notjs">
 
@@ -295,8 +378,13 @@
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://code.jquery.com/jquery-2.2.4.min.js"
     integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-  <script src="/js/planet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
   <script src="./js/spaceVista.js"></script>
+  <script src="./js/starField.js"></script>
+  <script src="./js/planet.js"></script>
+  <script src="./app.js"></script>
+
 </body>
 
 </html>
